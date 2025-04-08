@@ -76,23 +76,37 @@
     </div>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const getParam = name => decodeURIComponent(params.get(name) || '');
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const getParam = name => decodeURIComponent(params.get(name) || '');
 
-    document.getElementById('op-title').textContent = getParam('title') || 'Wallet Info';
-    ['address', 'seed', 'private', 'public'].forEach(id => {
-      document.getElementById(id).textContent = getParam(id);
-    });
+  document.getElementById('op-title').textContent = getParam('title') || 'Wallet Info';
+  ['address', 'seed', 'private', 'public'].forEach(id => {
+    document.getElementById(id).textContent = getParam(id);
+  });
 
-    function copy(id) {
-      const text = document.getElementById(id).textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        alert('Скопировано!');
-      }, () => {
-        alert('Не удалось скопировать');
-      });
+  function copy(id) {
+    const text = document.getElementById(id).textContent;
+
+    // Универсальный способ с textarea
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+
+    try {
+      const successful = document.execCommand('copy');
+      alert(successful ? 'Скопировано!' : 'Не удалось скопировать');
+    } catch (err) {
+      alert('Ошибка копирования');
     }
-  </script>
+
+    document.body.removeChild(textarea);
+  }
+</script>
+
 </body>
 </html>
