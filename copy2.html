@@ -97,6 +97,15 @@
     ['address', 'seed', 'private', 'public'].forEach(id => {
       const value = getParam(id);
       const el = document.getElementById(id);
+      const block = el.closest('.block');
+
+      if (!value) {
+        if (block) block.style.display = 'none';
+        return;
+      }
+
+      if (block) block.style.display = '';
+
       if (hidden.has(id)) {
         el.textContent = '*'.repeat(10) + '...';
         el.dataset.real = value;
